@@ -1,4 +1,4 @@
-
+###### Решение проблемы с запуском кафки брокеров.
 
 1. В /etc/systemd/system/kafka.service была ссылка на env, которого в системе не существует EnvironmentFile=/etc/default/kafka 
 Решение - закомментировал.
@@ -35,8 +35,8 @@ Hello, world
 Запуск роли:
 
 !!!Внимание версия на которой запускать:
-ansible-playbook 2.9.2
-
+######ansible-playbook 2.9.2
+```
 ansible-playbook site.yml -u <USERNAME> -i <IP>, -e ansible_ssh_port=<PORT> --private-key=~/.ssh/<SSH_KEY>.key
-
+```
 Например:
