@@ -35,7 +35,8 @@ Hello, world
 Запуск роли:
 
 !!!Внимание версия на которой запускать:
-######ansible-playbook 2.9.2
+
+###### ansible-playbook 2.9.2
 ```
 ansible-playbook site.yml -u <USERNAME> -i <IP>, -e ansible_ssh_port=<PORT> --private-key=~/.ssh/<SSH_KEY>.key
 ```
