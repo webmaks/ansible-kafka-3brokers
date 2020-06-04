@@ -42,5 +42,5 @@ ansible-playbook site.yml -u <USERNAME> -i <IP>, -e ansible_ssh_port=<PORT> --pr
 ```
 Например:
 ```
-ansible-playbook site.yml -u vagrant -i localhost, -e ansible_ssh_port=2200 --private-key=~/.ssh/kafka
+ansible-playbook site.yml -u ubuntu -i localhost, -e ansible_ssh_port=2200 --private-key=~/.ssh/kafka
 ```
