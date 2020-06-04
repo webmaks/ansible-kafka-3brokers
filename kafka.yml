@@ -1,0 +1,7 @@
+---
+- name: install kafka cluster
+  become: true
+  hosts: all
+  gather_facts: yes
+  roles:
+    - kafka

@@ -1,0 +1,94 @@
+---
+- name: checking kafka brokers directories
+  stat:
+    path: "{{ item }}"
+  register: kafka_dirs
+  with_items:
+  - ["/etc/kafka_1001/config/", "/etc/kafka_1002/config/", "/etc/kafka_1003/config/"]
+
+- name: checking kafka brokers log directories
+  stat:
+    path: "{{ item }}"
+  register: kafka_log_dirs
+  with_items:
+  - ["/var/log/kafka1001", "/var/log/kafka1002", "/var/log/kafka1003"]
+    
+- name: creating directories for kafka brockers
+  file:
+    path: "{{ item.item }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ kafka.user }}"
+    group: "{{ kafka.group }}"
+  when: item.stat.exists == false
+  with_items:
+  - "{{ kafka_dirs.results }}"
+
+- name: creating directories for kafka brockers
+  file:
+    path: "{{ item.item }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ kafka.user }}"
+    group: "{{ kafka.group }}"
+  when: item.stat.exists == false
+  with_items:
+  - "{{ kafka_log_dirs.results }}"
+
+- name: coping config dirs 
+  copy: 
+    src: /usr/lib/kafka/config/
+    dest: "{{ item.item }}"
+    remote_src: yes
+    mode: "0755"
+    owner: "{{ kafka.user }}"
+    group: "{{ kafka.group }}"
+  when: item.stat.exists == false
+  with_items:
+  - "{{ kafka_dirs.results }}"
+
+
+- name: copy kafka brokers config files 
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0755"
+    owner: "{{ kafka.user }}"  
+    group: "{{ kafka.group }}"
+  with_items:
+    - {src: 'server.properties1.j2', dest: '/etc/kafka_1001/config/server.properties'}
+    - {src: 'server.properties2.j2', dest: '/etc/kafka_1002/config/server.properties'}
+    - {src: 'server.properties3.j2', dest: '/etc/kafka_1003/config/server.properties'}
+
+- name: coping systemd service 
+  template:
+    src: kafka@.service.j2
+    dest: /etc/systemd/system/kafka@.service
+
+- name: reload 
+  systemd:
+    daemon_reload: yes
+
+- name: starting and enabling kafka brokers serivces
+  systemd:
+    state: started
+    name: "{{ item }}"
+    enabled: yes 
+  with_items:
+    - kafka@1001
+    - kafka@1002
+    - kafka@1003
+
+
+
+
+
+
+
+
+
+
+
+
+
+

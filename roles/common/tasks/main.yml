@@ -1,0 +1,6 @@
+---
+- name: be sure wget is installed
+  apt:
+    name: "{{ common.wget }}"
+    state: present
+    cache_valid_time: 3600      

@@ -1,0 +1,150 @@
+# server.properties.j2
+
+
+# default: 2.2
+# Specify which version of the inter-broker protocol will be used. This is typically bumped after all brokers were upgraded to a new version. Example of some valid values are: 0.8.0, 0.8.1, 0.8.1.1, 0.8.2, 0.8.2.0, 0.8.2.1, 0.9.0.0, 0.9.0.1 Check ApiVersion for the full list.
+inter.broker.protocol.version=2.3
+
+# default: 2.2
+# Specify the message format version the broker will use to append messages to the logs. The value should be a valid ApiVersion. Some examples are: 0.8.2, 0.9.0.0, 0.10.0, check ApiVersion for more details. By setting a particular message format version, the user is certifying that all the existing messages on disk are smaller or equal than the specified version. Setting this value incorrectly will cause consumers with older versions to break as they will receive messages with a format that they don't understand.
+log.message.format.version=2.3
+
+# default: -1
+# Each broker is uniquely identified by a non-negative integer id. This id serves as the broker's "name" and allows the broker to be moved to a different host/port without confusing consumers. You can choose any number you like so long as it is unique.
+broker.id=1001
+
+# default: null
+# Rack of the broker. This will be used in rack aware replication assignment for fault tolerance. Examples: `RACK1`, `us-east-1d`
+broker.rack=1e2-19
+
+
+# default: 1000
+# Max number that can be used for a broker.id
+reserved.broker.max.id=1010
+
+# default: null
+# Specifies the ZooKeeper connection string in the form hostname:port, where hostname and port are the host and port for a node in your ZooKeeper cluster. To allow connecting through other ZooKeeper nodes when that host is down you can also specify multiple hosts in the form hostname1:port1,hostname2:port2,hostname3:port3.  ZooKeeper also allows you to add a "chroot" path which will make all kafka data for this cluster appear under a particular path. This is a way to setup multiple Kafka clusters or other applications on the same ZooKeeper cluster. To do this give a connection string in the form hostname1:port1,hostname2:port2,hostname3:port3/chroot/path which would put all this cluster's data under the path /chroot/path. Note that you must create this path yourself prior to starting the broker and consumers must use the same connection string.
+zookeeper.connect=127.0.0.1:2181
+
+
+# default: /tmp/kafka-logs
+# A comma-separated list of one or more directories in which Kafka data is stored. Each new partition that is created will be placed in the directory which currently has the fewest partitions.
+log.dirs=/var/log/kafka1001
+
+# default: 9092
+# The port on which the server accepts client connections.
+#
+# Kafka 0.10.0
+# DEPRECATED: only used when `listeners` is not set. Use `listeners` instead. the port to listen and accept connections on
+# port=9092
+
+
+# The number of network threads that the server uses for handling network requests. You probably don't need to change this.
+num.network.threads=2
+
+# The number of I/O threads that the server uses for executing requests. You should have at least as many threads as you have disks.
+num.io.threads=2
+
+
+
+# default: null
+# Listener List - Comma-separated list of URIs we will listen on and their protocols. Specify hostname as 0.0.0.0 to bind to all interfaces. Leave hostname empty to bind to default interface. Examples of legal listener lists: PLAINTEXT://myhost:9092,TRACE://:9091 PLAINTEXT://0.0.0.0:9092, TRACE://localhost:9093
+listeners=PLAINTEXT://0.0.0.0:{{ kafka.broker1_port }},SSL://0.0.0.0:{{ kafka.broker1_ssl_port }}
+
+# default: null
+# Listeners to publish to ZooKeeper for clients to use, if different than the listeners above. In IaaS environments, this may need to be different from the interface to which the broker binds. If this is not set, the value for `listeners` will be used.
+advertised.listeners=PLAINTEXT://{{ ansible_default_ipv4.address }}:{{ kafka.broker1_port }},SSL://{{ ansible_default_ipv4.address }}:{{ kafka.broker1_ssl_port }}
+
+
+# default: 100 * 1024
+# The SO_SNDBUFF buffer the server prefers for socket connections.
+socket.send.buffer.bytes=102400
+
+# default: 100 * 1024
+# The SO_RCVBUFF buffer the server prefers for socket connections.
+socket.receive.buffer.bytes=102400
+
+# default: 100 * 1024 * 1024
+# The maximum request size the server will allow. This prevents the server from running out of memory and should be smaller than the Java heap size.
+socket.request.max.bytes=104857600
+
+# The default number of partitions per topic if a partition count isn't given at topic creation time.
+num.partitions=8
+
+# default: 1024 * 1024 * 1024
+# The log for a topic partition is stored as a directory of segment files. This setting controls the size to which a segment file will grow before a new segment is rolled over in the log. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+log.segment.bytes=1073741824
+
+
+
+
+
+
+# default: 7 days
+# The amount of time to keep a log segment before it is deleted, i.e. the default data retention window for all topics. Note that if both log.retention.minutes and log.retention.bytes are both set we delete a segment when either limit is exceeded. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+log.retention.hours=168
+
+# default: -1
+# The amount of data to retain in the log for each topic-partitions. Note that this is the limit per-partition so multiply by the number of partitions to get the total data retained for the topic. Also note that if both log.retention.hours and log.retention.bytes are both set we delete a segment when either limit is exceeded. This setting can be overridden on a per-topic basis (see the per-topic configuration section).
+log.retention.bytes=10737418240
+
+# default: 5 minutes
+# The period with which we check whether any log segment is eligible for deletion to meet the retention policies.
+log.retention.check.interval.ms=300000
+
+
+# default: Long.MaxValue
+# The number of messages written to a log partition before we force an fsync on the log. Setting this lower will sync data to disk more often but will have a major impact on performance. We generally recommend that people make use of replication for durability rather than depending on single-server fsync, however this setting can be used to be extra certain.
+log.flush.interval.messages=20000
+
+
+# default: Long.MaxValue
+# The maximum time between fsync calls on the log. If used in conjuction with log.flush.interval.messages the log will be flushed when either criteria is met.
+log.flush.interval.ms=120000
+
+
+# default: true
+# Enable auto creation of topic on the server. If this is set to true then attempts to produce data or fetch metadata for a non-existent topic will automatically create it with the default replication factor and number of partitions.
+auto.create.topics.enable=False
+
+
+
+# default: 6000
+# The maximum amount of time that the client waits to establish a connection to zookeeper.
+zookeeper.connection.timeout.ms=6000
+
+
+# default: true
+# Enable controlled shutdown of the broker. If enabled, the broker will move all leaders on it to some other brokers before shutting itself down. This reduces the unavailability window during shutdown.
+controlled.shutdown.enable=true
+
+# Number of retries to complete the controlled shutdown successfully before executing an unclean shutdown.
+controlled.shutdown.max.retries=3
+
+# default: 5000
+# Backoff time between shutdown retries.
+controlled.shutdown.retry.backoff.ms=5000
+
+# default: true
+# If this is enabled the controller will automatically try to balance leadership for partitions among the brokers by periodically returning leadership to the "preferred" replica for each partition if it is available.
+auto.leader.rebalance.enable=True
+
+
+
+# The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.
+num.recovery.threads.per.data.dir=1
+
+
+
+# default: false
+# Enable delete topic.
+delete.topic.enable=True
+
+
+# default: 1440
+# Offsets that are older than this age will be marked for deletion. The actual purge will occur when the log cleaner compacts the offsets topic.
+offsets.topic.retention.minutes=1
+
+
+# The replication factor for the offset commit topic. A higher setting (e.g., three or four) is recommended in order to ensure higher availability. If the offsets topic is created when fewer brokers than the replication factor then the offsets topic will be created with fewer replicas.
+offsets.topic.replication.factor=3

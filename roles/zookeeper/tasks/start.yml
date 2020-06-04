@@ -1,0 +1,10 @@
+---
+- name: systemd reload
+  systemd:
+    daemon_reload: yes
+
+- name: start and enable serivce
+  systemd:
+    state: started
+    name: zookeeper-server
+    enabled: yes

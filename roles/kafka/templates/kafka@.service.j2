@@ -1,0 +1,17 @@
+[Unit]
+Description=Kafka Daemon Broker %I
+After=zookeeper-server.service
+
+[Service]
+Type=simple
+User=kafka
+Group=kafka
+LimitNOFILE=100000
+Restart=on-failure
+#EnvironmentFile=/etc/default/kafka
+PIDFile=/tmp/broker_%i.pid
+ExecStart=/usr/lib/kafka/bin/kafka-server-start.sh /etc/kafka_%i/config/server.properties
+ExecStop=/usr/lib/kafka/bin/kafka-server-stop.sh
+
+[Install]
+WantedBy=multi-user.target

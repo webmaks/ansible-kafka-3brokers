@@ -1,0 +1,7 @@
+---
+- name: install common pkgs like wget 
+  become: true
+  hosts: all
+  gather_facts: yes
+  roles:
+    - common

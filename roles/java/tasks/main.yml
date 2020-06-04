@@ -1,0 +1,11 @@
+---
+- name: be sure Java is installed
+  apt:
+    name: "{{ item }}"
+    state: present
+    update-cache: yes
+    cache_valid_time: 3600
+  loop:
+    - "{{ java.jdk }}"
+    - "{{ java.jdk_headless }}"
+

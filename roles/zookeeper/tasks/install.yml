@@ -1,0 +1,37 @@
+---
+- name: check directory exists
+  stat:
+    path: /usr/lib/kafka
+  register: kafka_dir  
+
+- name: create kafka directory
+  file:
+    path: /usr/lib/kafka
+    state: directory
+    mode: "0755"
+    owner: "{{ kafka.user }}"
+    group: "{{ kafka.group }}"
+  when: kafka_dir.stat.exists == false
+
+- name: copy and untar archive with kafka 
+  unarchive:
+    src: kafka.tar.gz
+    dest: /usr/lib/kafka
+    owner: "{{ kafka.user }}"
+    group: "{{ kafka.group }}"
+    extra_opts: [--strip-components=1]
+  when: kafka_dir.stat.exists == false
+
+- name: copy config for zookeeper to remote
+  template:
+    src: zookeeper.properties.j2
+    dest: /usr/lib/kafka/config/zookeeper.properties
+    owner: "{{ kafka.user }}"  
+    group: "{{ kafka.group }}"
+  when: kafka_dir.stat.exists == false
+
+- name: copy zookeeper systemd service 
+  template:
+    src: zookeeper-server.service.j2
+    dest: /etc/systemd/system/zookeeper-server.service
+  when: kafka_dir.stat.exists == false

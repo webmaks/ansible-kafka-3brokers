@@ -1,0 +1,6 @@
+---
+- name: be user kafka exists
+  user: name="{{ kafka.user }}" password="{{ kafka.password }}" state=present
+
+
+
