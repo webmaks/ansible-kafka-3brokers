@@ -41,3 +41,6 @@ Hello, world
 ansible-playbook site.yml -u <USERNAME> -i <IP>, -e ansible_ssh_port=<PORT> --private-key=~/.ssh/<SSH_KEY>.key
 ```
 Например:
+```
+ansible-playbook site.yml -u vagrant -i localhost, -e ansible_ssh_port=2200 --private-key=~/.ssh/kafka
+```
