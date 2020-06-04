@@ -1,4 +1,4 @@
-1. В /etc/systemd/system/kafka.service была ссылка на env, которого в системе не существует EnvironmentFile=/etc/default/kafka
+- 1. В /etc/systemd/system/kafka.service была ссылка на env, которого в системе не существует EnvironmentFile=/etc/default/kafka
 Решение - закомментировал.
 
 2. В systemd используется переменная "%i" а сервис создан без учета этого.
