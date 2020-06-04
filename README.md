@@ -1,9 +1,7 @@
 * В /etc/systemd/system/kafka.service была ссылка на env, которого в системе не существует EnvironmentFile=/etc/default/kafka
 Решение - закомментировал.
-
 * В systemd используется переменная "%i" а сервис создан без учета этого.
 Решение - переименовал название сервиса kafka.service -> kafka@.service
-
 * Доступ на порт zookeeper был закрыт правилами firewall:
 # iptables -L -nv
 Chain INPUT (policy ACCEPT 14626 packets, 6960K bytes)
