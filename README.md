@@ -24,10 +24,10 @@ kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --par
 Created topic MyTopic.
 ```
 ```
-echo "Hello, world" | kafka-console-producer.sh --broker-list 10.236.30.222:9092 --topic MyTopic
+echo "Hello, world" | kafka-console-producer.sh --broker-list internalIP:9092 --topic MyTopic
 ```
 ```
-kafka-console-consumer.sh --bootstrap-server 10.236.30.222:9092 --topic MyTopic --from-beginning
+kafka-console-consumer.sh --bootstrap-server internalIP:9092 --topic MyTopic --from-beginning
 Hello, world
 ```
 
