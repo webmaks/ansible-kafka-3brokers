@@ -1,9 +1,9 @@
 ## Решение проблемы с запуском кафки брокеров.
 
-1. В /etc/systemd/system/kafka.service была ссылка на env, которого в системе не существует EnvironmentFile=/etc/default/kafka 
+1. В `/etc/systemd/system/kafka.service` была ссылка на env, которого в системе не существует `EnvironmentFile=/etc/default/kafka` 
 Решение - закомментировал.
 2. В systemd используется переменная "%i" а сервис создан без учета этого.
-Решение - переименовал название сервиса kafka.service -> kafka@.service
+Решение - переименовал название сервиса `kafka.service` -> `kafka@.service`
 3. Доступ на порт zookeeper был закрыт правилами firewall:
 ```
 iptables -L -nv
@@ -15,8 +15,8 @@ Chain INPUT (policy ACCEPT 14626 packets, 6960K bytes)
 ```
 Решение - сброс правил "iptables -F"
 
-4. В конфигурации путь к логам был указан как /var/lib/kafka100[123], но таких каталогов не было.
-Решение - изменил путь на /var/log/kafka100[123]
+4. В конфигурации путь к логам был указан как `/var/lib/kafka100[123]`, но таких каталогов не было.
+Решение - изменил путь на `/var/log/kafka100[123]`
 
 После чего все запустилось:
 ```
